@@ -1,0 +1,7 @@
+---
+git:
+  url: git@github.com:mbahvw/tap-gitops-v1.git
+  ref: origin/main
+  sub_path: clusters/tap-on-aws/cluster-config
+tap_package_repository:
+  oci_repository: mytapregistry.azurecr.io/tapimages/tap-packages
