@@ -5,7 +5,7 @@ tap_install:
     ceip_policy_disclosed: true
 
     shared:
-      ingress_domain: tap.opsdevsys.com
+      ingress_domain: tap-gui.opsdevsys.com
       image_registry:  
         project_path: ""
     #supply_chain: basic
@@ -47,9 +47,25 @@ tap_install:
         service:
           type: LoadBalancer
     tap_gui:
+      ingressEnabled: true
+      ingressDomain: opsdevsys.com
+      tls:
+        namespace: tap-gui
+        secretName: tap-gui-cert
+  app_config:
+    supplyChain:
+      enablePlugin: true
       app_config:
         auth:
-          allowGuestAccess: true 
+          allowGuestAccess: true
+    metadata_store:
+      ingressEnabled: true
+      ingressDomain: "opsdevsys.com"
+      app_service_type: ClusterIP
+      ns_for_export_app_cert: "dev"
+scanning:
+  metadataStore:
+    url: "" # Configuration is moved, so set this string to empty.
     grype:
       namespace: dev
       targetImagePullSecret: "registries-credentials"
@@ -62,7 +78,6 @@ tap_install:
           name: store-auth-token
           importFromNamespace: metadata-store-secrets
 
-    
 # #    namespace_provisioner:
 #       controller: false
 #       additional_sources:
