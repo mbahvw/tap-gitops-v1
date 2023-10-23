@@ -12,6 +12,14 @@ tap_install:
     supply_chain: testing_scanning
     #ootb_supply_chain_basic:
     ootb_supply_chain_testing_scanning:
+      registry:
+        server: 674318584023.dkr.ecr.us-east-2.amazonaws.com
+        # The prefix of the ECR repository.  Workloads will need
+        # two repositories created:
+        #
+        # tanzu-application-platform/<workloadname>-<namespace>
+        # tanzu-application-platform/<workloadname>-<namespace>-bundle
+        repository: tanzu-application-platform
       external_delivery: true
       gitops:
         deliverable_repository_owner: "mbahvm"
@@ -30,6 +38,10 @@ tap_install:
       #     policy: lax-scan-policy
       #   source:
       #     policy: lax-scan-policy
+    buildservice:
+      kp_default_repository: 674318584023.dkr.ecr.us-east-2.amazonaws.com/tap-build-service
+      # Enable the build service k8s service account to bind to the AWS IAM Role
+      kp_default_repository_aws_iam_role_arn: "arn:aws:iam::674318584023:role/tap-build-service"
     contour:
       envoy:
         service:
