@@ -49,9 +49,9 @@ tap_install:
     tap_gui:
       ingressEnabled: true
       ingressDomain: opsdevsys.com
-      tls:
-        namespace: tap-gui
-        secretName: tap-gui-cert
+      # tls:
+      #   namespace: tap-gui
+      #   secretName: tap-gui-cert
       app_config:
         auth:
           allowGuestAccess: true
