@@ -57,25 +57,25 @@ tap_install:
           allowGuestAccess: true
         supplyChain:
           enablePlugin: true
-    metadata_store:
-      ingressEnabled: true
-      ingressDomain: "opsdevsys.com"
-      app_service_type: ClusterIP
-      ns_for_export_app_cert: "dev"
+    # metadata_store:
+    #   ingressEnabled: true
+    #   ingressDomain: "opsdevsys.com"
+    #   app_service_type: ClusterIP
+    #   ns_for_export_app_cert: "dev"
     scanning:
       metadataStore:
         url: "" # Configuration is moved, so set this string to empty.
-    grype:
-      namespace: dev
-      targetImagePullSecret: "registries-credentials"
-      metadataStore:
-        url: "https://metadata-store.view.tap.opsdevsys.com"
-        caSecret:
-          name: store-ca-cert
-          importFromNamespace: metadata-store-secrets
-        authSecret:
-          name: store-auth-token
-          importFromNamespace: metadata-store-secrets
+    # grype:
+    #   namespace: dev
+    #   targetImagePullSecret: "registries-credentials"
+    #   metadataStore:
+    #     url: "https://metadata-store.view.tap.opsdevsys.com"
+    #     caSecret:
+    #       name: store-ca-cert
+    #       importFromNamespace: metadata-store-secrets
+    #     authSecret:
+    #       name: store-auth-token
+    #       importFromNamespace: metadata-store-secrets
 
 # #    namespace_provisioner:
 #       controller: false
