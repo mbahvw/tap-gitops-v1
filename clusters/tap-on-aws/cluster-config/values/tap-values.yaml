@@ -9,9 +9,9 @@ tap_install:
       image_registry:  
         project_path: ""
     #supply_chain: basic
-    supply_chain: testing_scanning
+    supply_chain: testing
     #ootb_supply_chain_basic:
-    ootb_supply_chain_testing_scanning:
+    ootb_supply_chain_testing:
       registry:
         server: 674318584023.dkr.ecr.us-east-2.amazonaws.com
         # The prefix of the ECR repository.  Workloads will need
@@ -50,64 +50,61 @@ tap_install:
       app_config:
         auth:
           allowGuestAccess: true 
-    grype:
-      namespace: dev
-      targetImagePullSecret: "registries-credentials"
-      metadataStore:
-        url: "https://metadata-store.view.tap.opsdevsys.com"
-        caSecret:
-          name: store-ca-cert
-          importFromNamespace: metadata-store-secrets
-        authSecret:
-          name: store-auth-token
-          importFromNamespace: metadata-store-secrets
+    # grype:
+    #   namespace: dev
+    #   targetImagePullSecret: "registries-credentials"
+    #   metadataStore:
+    #     url: "https://metadata-store.view.tap.opsdevsys.com"
+    #     caSecret:
+    #       name: store-ca-cert
+    #       importFromNamespace: metadata-store-secrets
+    #     authSecret:
+    #       name: store-auth-token
+    #       importFromNamespace: metadata-store-secrets
 
-    scanning:
-      metadataStore:
-        url: ""
-
-    namespace_provisioner:
-      controller: false
-      additional_sources:
-      - git:
-          url: ssh://git@github.com/mbahvm/tap-gitops-v1
-          ref: origin/main
-          subPath: credentials
-          secretRef:
-            name: ssh
-            namespace: tanzu-sync
-            create_export: true
-        path: _ytt_lib/workload-creds
-      - git:
-          url: ssh://git@github.com/mbahvm/tap-gitops-v1
-          ref: origin/main
-          subPath: additional_resources
-          secretRef:
-            name: ssh
-            namespace: tanzu-sync
-            create_export: true
-        path: _ytt_lib/workload-additional-resources
-      gitops_install:
-        url: ssh://git@github.com/mbahvm/tap-gitops-v1
-        ref: origin/main
-        subPath: ns-provisioner
-        secretRef:
-          name: ssh
-          namespace: tanzu-sync
-          # create_export: true
-      import_data_values_secrets:
-      - name: tenant-secrets
-        namespace: tap-install
-        create_export: true
-      overlay_secrets:
-      - name: workload-git-ssh-overlay
-        namespace: tap-install
-        create_export: true
-    package_overlays:
-    - name: "ootb-supply-chain-testing-scanning"
-      secrets: 
-      - name: "ootb-supply-chain-overlay"
-    - name: "ootb-templates"
-      secrets: 
-      - name: "ootb-template-overlay"  
+    
+# #    namespace_provisioner:
+#       controller: false
+#       additional_sources:
+#       - git:
+#           url: ssh://git@github.com/mbahvm/tap-gitops-v1
+#           ref: origin/main
+#           subPath: credentials
+#           secretRef:
+#             name: ssh
+#             namespace: tanzu-sync
+#             create_export: true
+#         path: _ytt_lib/workload-creds
+#       - git:
+#           url: ssh://git@github.com/mbahvm/tap-gitops-v1
+#           ref: origin/main
+#           subPath: additional_resources
+#           secretRef:
+#             name: ssh
+#             namespace: tanzu-sync
+#             create_export: true
+#         path: _ytt_lib/workload-additional-resources
+#       gitops_install:
+#         url: ssh://git@github.com/mbahvm/tap-gitops-v1
+#         ref: origin/main
+#         subPath: ns-provisioner
+#         secretRef:
+#           name: ssh
+#           namespace: tanzu-sync
+#           # create_export: true
+#       import_data_values_secrets:
+#       - name: tenant-secrets
+#         namespace: tap-install
+#         create_export: true
+#       overlay_secrets:
+#       - name: workload-git-ssh-overlay
+#         namespace: tap-install
+#         create_export: true
+#     package_overlays:
+#     - name: "ootb-supply-chain-testing-scanning"
+#       secrets: 
+#       - name: "ootb-supply-chain-overlay"
+#     - name: "ootb-templates"
+#       secrets: 
+#       - name: "ootb-template-overlay"  
 
