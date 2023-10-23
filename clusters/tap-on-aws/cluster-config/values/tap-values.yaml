@@ -50,17 +50,17 @@ tap_install:
       app_config:
         auth:
           allowGuestAccess: true 
-    # grype:
-    #   namespace: dev
-    #   targetImagePullSecret: "registries-credentials"
-    #   metadataStore:
-    #     url: "https://metadata-store.view.tap.opsdevsys.com"
-    #     caSecret:
-    #       name: store-ca-cert
-    #       importFromNamespace: metadata-store-secrets
-    #     authSecret:
-    #       name: store-auth-token
-    #       importFromNamespace: metadata-store-secrets
+    grype:
+      namespace: dev
+      targetImagePullSecret: "registries-credentials"
+      metadataStore:
+        url: "https://metadata-store.view.tap.opsdevsys.com"
+        caSecret:
+          name: store-ca-cert
+          importFromNamespace: metadata-store-secrets
+        authSecret:
+          name: store-auth-token
+          importFromNamespace: metadata-store-secrets
 
     
 # #    namespace_provisioner:
