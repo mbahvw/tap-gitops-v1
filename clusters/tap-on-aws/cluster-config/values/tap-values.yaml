@@ -52,20 +52,19 @@ tap_install:
       tls:
         namespace: tap-gui
         secretName: tap-gui-cert
-  app_config:
-    supplyChain:
-      enablePlugin: true
       app_config:
         auth:
           allowGuestAccess: true
+        supplyChain:
+          enablePlugin: true
     metadata_store:
       ingressEnabled: true
       ingressDomain: "opsdevsys.com"
       app_service_type: ClusterIP
       ns_for_export_app_cert: "dev"
-scanning:
-  metadataStore:
-    url: "" # Configuration is moved, so set this string to empty.
+    scanning:
+      metadataStore:
+        url: "" # Configuration is moved, so set this string to empty.
     grype:
       namespace: dev
       targetImagePullSecret: "registries-credentials"
