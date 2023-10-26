@@ -6,8 +6,8 @@ tap_install:
 
     shared:
       ingress_domain: tap-gui.opsdevsys.com
-      image_registry:  
-        project_path: ""
+      #image_registry:  
+        #project_path: 
     #supply_chain: basic
     supply_chain: testing
     #ootb_supply_chain_basic:
