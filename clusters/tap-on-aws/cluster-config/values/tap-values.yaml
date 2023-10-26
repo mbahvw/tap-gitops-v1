@@ -18,6 +18,7 @@ tap_install:
     - local-source-proxy.apps.tanzu.vmware.com
     - learningcenter.tanzu.vmware.com
     - crossplane.tanzu.vmware.com
+    - workshops.learningcenter.tanzu.vmware.com
 
     supply_chain: basic # Can take testing, testing_scanning.
 
