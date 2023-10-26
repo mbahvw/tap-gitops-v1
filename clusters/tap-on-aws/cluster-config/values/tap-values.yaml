@@ -1,17 +1,23 @@
 ---
 tap_install:
   values:
-    profile: full
+    shared:
+      ingress_domain: "opsdevsys.com"
+
     ceip_policy_disclosed: true
 
-    shared:
-      ingress_domain: tap-gui.opsdevsys.com
-      #image_registry:  
-        #project_path: 
-    #supply_chain: basic
-    supply_chain: testing
-    #ootb_supply_chain_basic:
-    ootb_supply_chain_testing:
+    # The above keys are minimum numbers of entries needed in tap-values.yaml to get a functioning TAP Full profile installation.
+
+    # Below are the keys which may have default values set, but can be overridden.
+
+    profile: full # Can take iterate, build, run, view.
+
+    excluded_packages:
+    - policy.apps.tanzu.vmware.com
+
+    supply_chain: basic # Can take testing, testing_scanning.
+
+    ootb_supply_chain_basic: # Based on supply_chain set above, can be changed to ootb_supply_chain_testing, ootb_supply_chain_testing_scanning.
       registry:
         server: 674318584023.dkr.ecr.us-east-2.amazonaws.com
         # The prefix of the ECR repository.  Workloads will need
@@ -20,107 +26,49 @@ tap_install:
         # tanzu-application-platform/<workloadname>-<namespace>
         # tanzu-application-platform/<workloadname>-<namespace>-bundle
         repository: tanzu-application-platform
-      external_delivery: true
-      gitops:
-        deliverable_repository_owner: "mbahvm"
-        deliverable_repository_name: "tap-gitops-v1-deliverable"
-        deliverable_branch: main
-        deliverable_server_address: "ssh://git@github.com"
-        #ssh_secret: ""
-        ssh_secret: "git-auth"
-        server_address: "ssh://git@github.com"
-        repository_owner: "mbahvm"
-        repository_name: "tap-gitops-v1-config"
-        branch: main
-        # repository_prefix: git@github.com/tap-gitops-v1/config-dir
-      # scanning:
-      #   image:
-      #     policy: lax-scan-policy
-      #   source:
-      #     policy: lax-scan-policy
+
+    contour:
+      envoy:
+        service:
+          type: LoadBalancer # This is set by default, but can be overridden by setting a different value.
+
     buildservice:
       kp_default_repository: 674318584023.dkr.ecr.us-east-2.amazonaws.com/tap-build-service
       # Enable the build service k8s service account to bind to the AWS IAM Role
       kp_default_repository_aws_iam_role_arn: "arn:aws:iam::674318584023:role/tap-build-service"
-    contour:
-      envoy:
-        service:
-          type: LoadBalancer
+
+    # local_source_proxy:
+    #   # Takes the value from the project_path under the image_registry section of shared by default, but can be overridden by setting a different value.
+    #   repository: "EXTERNAL-REGISTRY-FOR-LOCAL-SOURCE"
+    #   push_secret:
+    #     # When set to true, the secret mentioned in this section is automatically exported to Local Source Proxy's namespace.
+    #     name: "EXTERNAL-REGISTRY-FOR-LOCAL-SOURCE-SECRET"
+    #     namespace: "EXTERNAL-REGISTRY-FOR-LOCAL-SOURCE-SECRET-NAMESPACE"
+    #     # When set to true, the secret mentioned in this section is automatically exported to Local Source Proxy's namespace.
+    #     create_export: true
+
+    ootb_templates:
+      # Enable the config writer service to use cloud based iaas authentication
+      # which are retrieved from the developer namespace service account by
+      # default
+      iaas_auth: true
+
     tap_gui:
-      ingressEnabled: true
-      ingressDomain: opsdevsys.com
-      # tls:
-      #   namespace: tap-gui
-      #   secretName: tap-gui-cert
       app_config:
         auth:
-          allowGuestAccess: true
-        supplyChain:
-          enablePlugin: true
-    # metadata_store:
-    #   ingressEnabled: true
-    #   ingressDomain: "opsdevsys.com"
-    #   app_service_type: ClusterIP
-    #   ns_for_export_app_cert: "dev"
-    excluded_packages:
-    - metadata-store.apps.tanzu.vmware.com
+          allowGuestAccess: true  # This allows unauthenticated users to log in to your portal. If you want to deactivate it, make sure you configure an alternative auth provider.
+        # catalog:
+        #   locations:
+        #     - type: url
+        #       target: https://GIT-CATALOG-URL/catalog-info.yaml
+
+    metadata_store:
+      ns_for_export_app_cert: "dev" # Verify this namespace is available within your cluster before initiating the Tanzu Application Platform installation.
+      app_service_type: ClusterIP # Defaults to LoadBalancer. If shared.ingress_domain is set earlier, this must be set to ClusterIP.
+
     scanning:
       metadataStore:
         url: "" # Configuration is moved, so set this string to empty.
-    # grype:
-    #   namespace: dev
-    #   targetImagePullSecret: "registries-credentials"
-    #   metadataStore:
-    #     url: "https://metadata-store.view.tap.opsdevsys.com"
-    #     caSecret:
-    #       name: store-ca-cert
-    #       importFromNamespace: metadata-store-secrets
-    #     authSecret:
-    #       name: store-auth-token
-    #       importFromNamespace: metadata-store-secrets
 
-# #    namespace_provisioner:
-#       controller: false
-#       additional_sources:
-#       - git:
-#           url: ssh://git@github.com/mbahvm/tap-gitops-v1
-#           ref: origin/main
-#           subPath: credentials
-#           secretRef:
-#             name: ssh
-#             namespace: tanzu-sync
-#             create_export: true
-#         path: _ytt_lib/workload-creds
-#       - git:
-#           url: ssh://git@github.com/mbahvm/tap-gitops-v1
-#           ref: origin/main
-#           subPath: additional_resources
-#           secretRef:
-#             name: ssh
-#             namespace: tanzu-sync
-#             create_export: true
-#         path: _ytt_lib/workload-additional-resources
-#       gitops_install:
-#         url: ssh://git@github.com/mbahvm/tap-gitops-v1
-#         ref: origin/main
-#         subPath: ns-provisioner
-#         secretRef:
-#           name: ssh
-#           namespace: tanzu-sync
-#           # create_export: true
-#       import_data_values_secrets:
-#       - name: tenant-secrets
-#         namespace: tap-install
-#         create_export: true
-#       overlay_secrets:
-#       - name: workload-git-ssh-overlay
-#         namespace: tap-install
-#         create_export: true
-#     package_overlays:
-#     - name: "ootb-supply-chain-testing-scanning"
-#       secrets: 
-#       - name: "ootb-supply-chain-overlay"
-#     - name: "ootb-templates"
-#       secrets: 
-#       - name: "ootb-template-overlay"  
-
+    # tap_telemetry:
+    #   customer_entitlement_account_number: "CUSTOMER-ENTITLEMENT-ACCOUNT-NUMBER" # (Optional) Identify data for creating Tanzu Application Platform usage reports.
